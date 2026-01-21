@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotels - Check-in to Reality</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #003580;
+            --primary-hover: #00224F;
+            --accent-color: #FEBB02;
+            --success-color: #008009;
+            --warning-color: #F59E0B;
+            --danger-color: #CC0000;
+            --text-dark: #333333;
+            --text-light: #6B6B6B;
+            --border-color: #E7E7E7;
+            --bg-light: #F5F5F5;
+            --rating-excellent: #003580;
+            --rating-good: #008009;
+            --rating-fair: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary-color);
+            padding: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo:hover {
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #00224F 100%);
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .search-input-group {
+            flex: 1;
+        }
+
+        .search-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        /* Filters Sidebar */
+        .filters-sidebar {
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            padding: 0;
+            height: fit-content;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .filter-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .filter-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-section:last-child {
+            border-bottom: none;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .filter-checkbox input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .filter-checkbox label {
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .filter-count {
+            margin-left: auto;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Amenity Package Buttons */
+        .amenity-package-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            margin: 5px 5px 5px 0;
+            background: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .amenity-package-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .amenity-package-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .amenity-package-btn i {
+            font-size: 14px;
+        }
+
+        /* Hotels Section */
+        .hotels-section {
+            flex: 1;
+        }
+
+        .results-header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .results-count {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sort-dropdown {
+            padding: 8px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Hotel Card */
+        .hotel-card {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .hotel-image {
+            width: 280px;
+            height: 220px;
+            background: linear-gradient(45deg, #E0E0E0 25%, #F0F0F0 25%, #F0F0F0 50%, #E0E0E0 50%, #E0E0E0 75%, #F0F0F0 75%, #F0F0F0);
+            background-size: 20px 20px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-size: 48px;
+        }
+
+        .hotel-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--danger-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hotel-badge.low-risk {
+            background: var(--success-color);
+        }
+
+        .hotel-badge.medium-risk {
+            background: var(--warning-color);
+        }
+
+        .hotel-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hotel-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .hotel-info {
+            flex: 1;
+        }
+
+        .hotel-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            text-decoration: none;
+        }
+
+        .hotel-name:hover {
+            text-decoration: underline;
+        }
+
+        .hotel-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .hotel-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .rating-score {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 10px;
+            border-radius: 6px 6px 6px 0;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .rating-score.good {
+            background: var(--rating-good);
+        }
+
+        .rating-score.fair {
+            background: var(--rating-fair);
+        }
+
+        .rating-text {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .review-count {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .hotel-features {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .feature-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--text-dark);
+        }
+
+        .feature-tag i {
+            color: var(--success-color);
+        }
+
+        .hotel-description {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .hotel-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .gap-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gap-score-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .gap-score-value {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .gap-score-value.low {
+            background: #E8F5E9;
+            color: var(--success-color);
+        }
+
+        .gap-score-value.medium {
+            background: #FFF3E0;
+            color: var(--warning-color);
+        }
+
+        .gap-score-value.high {
+            background: #FFEBEE;
+            color: var(--danger-color);
+        }
+
+        .hotel-price {
+            text-align: right;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .price-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .book-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .book-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Location Badges */
+        .location-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .location-badge i {
+            font-size: 11px;
+        }
+
+        .location-badge.primary {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .location-badge.success {
+            background: #E8F5E9;
+            color: #388E3C;
+        }
+
+        .location-badge.warning {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+
+        .location-badge.info {
+            background: #E1F5FE;
+            color: #0288D1;
+        }
+
+        .location-badge.danger {
+            background: #FFEBEE;
+            color: #D32F2F;
+        }
+
+        .location-badge.secondary {
+            background: #F5F5F5;
+            color: #616161;
+        }
+
+        /* Neighborhood Score */
+        .neighborhood-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .neighborhood-score i {
+            font-size: 14px;
+        }
+
+        .score-value {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 5px;
+        }
+
+        .page-btn {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .page-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Loading */
+        .loading-spinner {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .filters-sidebar {
+                width: 100%;
+            }
+
+            .hotel-card {
+                flex-direction: column;
+            }
+
+            .hotel-image {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <i class="fas fa-hotel"></i>
+                    Check-in to Reality
+                </a>
+                <nav class="nav-links">
+                    <a href="/hotels">Hotels</a>
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/about">About</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-row">
+                    <div class="search-input-group">
+                        <div class="search-label">Destination</div>
+                        <select class="search-input" id="city-select">
+                            <option value="">All Cities</option>
+                        </select>
+                    </div>
+                    <div class="search-input-group">
+                        <div class="search-label">Hotel Name</div>
+                        <input type="text" class="search-input" id="hotel-name-search" placeholder="Search hotel name...">
+                    </div>
+                    <div class="search-input-group">
+                        <div class="search-label">Review Score</div>
+                        <select class="search-input" id="review-select">
+                            <option value="">Any Score</option>
+                            <option value="9">9+ Wonderful</option>
+                            <option value="8">8+ Very Good</option>
+                            <option value="7">7+ Good</option>
+                            <option value="6">6+ Pleasant</option>
+                        </select>
+                    </div>
+                    <button class="search-btn" onclick="searchHotels()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar">
+                <div class="filter-header">
+                    <i class="fas fa-filter"></i> Filter by:
+                </div>
+
+                <!-- Gap Score Filter -->
+                <div class="filter-section">
+                    <div class="filter-title">Reality Check Score</div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="gap-much-better" value="Much Better Than Expected" checked>
+                        <label for="gap-much-better">Much Better Than Expected</label>
+                        <span class="filter-count" id="count-much-better">0</span>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="gap-better" value="Better Than Expected" checked>
+                        <label for="gap-better">Better Than Expected</label>
+                        <span class="filter-count" id="count-better">0</span>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="gap-expected" value="As Expected" checked>
+                        <label for="gap-expected">As Expected</label>
+                        <span class="filter-count" id="count-expected">0</span>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="gap-medium" value="Medium Risk" checked>
+                        <label for="gap-medium">Medium Risk</label>
+                        <span class="filter-count" id="count-medium">0</span>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="gap-high" value="High Risk - Likely to Disappoint">
+                        <label for="gap-high">High Risk</label>
+                        <span class="filter-count" id="count-high">0</span>
+                    </div>
+                </div>
+
+                <!-- Amenity Packages -->
+                <div class="filter-section">
+                    <div class="filter-title">Quick Amenity Packages</div>
+                    <button class="amenity-package-btn" onclick="selectAmenityPackage('business')" title="WiFi + Breakfast + Gym">
+                        <i class="fas fa-briefcase"></i> Business
+                    </button>
+                    <button class="amenity-package-btn" onclick="selectAmenityPackage('family')" title="Pool + Kitchen + Parking + Pet-friendly">
+                        <i class="fas fa-users"></i> Family
+                    </button>
+                    <button class="amenity-package-btn" onclick="selectAmenityPackage('luxury')" title="Spa + Restaurant + Gym + Balcony">
+                        <i class="fas fa-gem"></i> Luxury
+                    </button>
+                    <button class="amenity-package-btn" onclick="selectAmenityPackage('budget')" title="WiFi + AC only">
+                        <i class="fas fa-dollar-sign"></i> Budget
+                    </button>
+                    <button class="amenity-package-btn" onclick="clearAllAmenities()" title="Clear all amenity filters">
+                        <i class="fas fa-times"></i> Clear
+                    </button>
+                </div>
+
+                <!-- Amenities Filter -->
+                <div class="filter-section">
+                    <div class="filter-title">Individual Amenities</div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-wifi" value="has_wifi">
+                        <label for="has-wifi"><i class="fas fa-wifi"></i> WiFi</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-parking" value="has_parking">
+                        <label for="has-parking"><i class="fas fa-parking"></i> Parking</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-pool" value="has_pool">
+                        <label for="has-pool"><i class="fas fa-swimming-pool"></i> Pool</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-gym" value="has_gym">
+                        <label for="has-gym"><i class="fas fa-dumbbell"></i> Gym</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-breakfast" value="has_breakfast">
+                        <label for="has-breakfast"><i class="fas fa-coffee"></i> Breakfast</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-ac" value="has_ac">
+                        <label for="has-ac"><i class="fas fa-snowflake"></i> AC</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-spa" value="has_spa">
+                        <label for="has-spa"><i class="fas fa-spa"></i> Spa</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-kitchen" value="has_kitchen">
+                        <label for="has-kitchen"><i class="fas fa-utensils"></i> Kitchen</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-balcony" value="has_balcony">
+                        <label for="has-balcony"><i class="fas fa-building"></i> Balcony</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-restaurant" value="has_restaurant">
+                        <label for="has-restaurant"><i class="fas fa-utensils"></i> Restaurant</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-pet_friendly" value="has_pet_friendly">
+                        <label for="has-pet_friendly"><i class="fas fa-paw"></i> Pet Friendly</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="has-elevator" value="has_elevator">
+                        <label for="has-elevator"><i class="fas fa-elevator"></i> Elevator</label>
+                    </div>
+                </div>
+
+                <!-- Distance Filter -->
+                <div class="filter-section">
+                    <div class="filter-title">Distance from Center</div>
+                    <div class="filter-checkbox">
+                        <input type="radio" name="distance" id="dist-any" value="" checked>
+                        <label for="dist-any">Any distance</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="radio" name="distance" id="dist-1" value="1">
+                        <label for="dist-1">Less than 1 km</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="radio" name="distance" id="dist-3" value="3">
+                        <label for="dist-3">Less than 3 km</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="radio" name="distance" id="dist-5" value="5">
+                        <label for="dist-5">Less than 5 km</label>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Hotels Section -->
+            <section class="hotels-section">
+                <div class="results-header">
+                    <div class="results-count">
+                        <span id="results-count">0</span> hotels found
+                    </div>
+                    <div>
+                        <label for="sort-select">Sort by:</label>
+                        <select class="sort-dropdown" id="sort-select" onchange="sortHotels()">
+                            <option value="review">Review Score</option>
+                            <option value="gap">Gap Score (Low to High)</option>
+                            <option value="distance">Distance from Center</option>
+                            <option value="reviews">Number of Reviews</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Hotels Container -->
+                <div id="hotels-container">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 20px; color: var(--text-light);">Loading hotels...</p>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container" id="pagination-container"></div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allHotels = [];
+        let filteredHotels = [];
+        let currentPage = 1;
+        const hotelsPerPage = 20;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCities();
+            loadHotels();
+            setupFilters();
+        });
+
+        // Load cities
+        async function loadCities() {
+            try {
+                const response = await fetch('/api/cities');
+                const cities = await response.json();
+                const citySelect = document.getElementById('city-select');
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading cities:', error);
+            }
+        }
+
+        // Load hotels
+        async function loadHotels() {
+            try {
+                const response = await fetch('/api/hotels/filtered', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                allHotels = await response.json();
+                applyFilters();
+            } catch (error) {
+                console.error('Error loading hotels:', error);
+            }
+        }
+
+        // Setup filter listeners
+        function setupFilters() {
+            // Gap category filters
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', applyFilters);
+            });
+
+            // Distance filters
+            document.querySelectorAll('input[name="distance"]').forEach(radio => {
+                radio.addEventListener('change', applyFilters);
+            });
+        }
+
+        // Apply filters
+        function applyFilters() {
+            filteredHotels = allHotels.filter(hotel => {
+                // City filter
+                const cityFilter = document.getElementById('city-select').value;
+                if (cityFilter && hotel.city !== cityFilter) return false;
+
+                // Hotel name search
+                const nameSearch = document.getElementById('hotel-name-search').value.toLowerCase();
+                if (nameSearch && !hotel.title.toLowerCase().includes(nameSearch)) return false;
+
+                // Review score filter
+                const reviewFilter = document.getElementById('review-select').value;
+                if (reviewFilter && parseFloat(hotel.review_score) < parseFloat(reviewFilter)) return false;
+
+                // Gap categories
+                const gapFilters = [];
+                if (document.getElementById('gap-much-better').checked) gapFilters.push('Much Better Than Expected');
+                if (document.getElementById('gap-better').checked) gapFilters.push('Better Than Expected');
+                if (document.getElementById('gap-expected').checked) gapFilters.push('As Expected');
+                if (document.getElementById('gap-medium').checked) gapFilters.push('Medium Risk');
+                if (document.getElementById('gap-high').checked) gapFilters.push('High Risk - Likely to Disappoint');
+
+                if (gapFilters.length > 0 && !gapFilters.includes(hotel.gap_category)) return false;
+
+                // Amenities
+                if (document.getElementById('has-wifi').checked && hotel.has_wifi !== '1') return false;
+                if (document.getElementById('has-parking').checked && hotel.has_parking !== '1') return false;
+                if (document.getElementById('has-pool').checked && hotel.has_pool !== '1') return false;
+                if (document.getElementById('has-gym').checked && hotel.has_gym !== '1') return false;
+                if (document.getElementById('has-breakfast').checked && hotel.has_breakfast !== '1') return false;
+                if (document.getElementById('has-ac').checked && hotel.has_ac !== '1') return false;
+                if (document.getElementById('has-spa').checked && hotel.has_spa !== '1') return false;
+                if (document.getElementById('has-kitchen').checked && hotel.has_kitchen !== '1') return false;
+                if (document.getElementById('has-balcony').checked && hotel.has_balcony !== '1') return false;
+                if (document.getElementById('has-restaurant').checked && hotel.has_restaurant !== '1') return false;
+                if (document.getElementById('has-pet_friendly').checked && hotel.has_pet_friendly !== '1') return false;
+                if (document.getElementById('has-elevator').checked && hotel.has_elevator !== '1') return false;
+
+                // Distance
+                const maxDistance = document.querySelector('input[name="distance"]:checked').value;
+                if (maxDistance && parseFloat(hotel.distance_from_center_km) > parseFloat(maxDistance)) return false;
+
+                return true;
+            });
+
+            updateCounts();
+            sortHotels();
+        }
+
+        // Update filter counts
+        function updateCounts() {
+            const counts = {
+                'Much Better Than Expected': 0,
+                'Better Than Expected': 0,
+                'As Expected': 0,
+                'Medium Risk': 0,
+                'High Risk - Likely to Disappoint': 0
+            };
+
+            filteredHotels.forEach(hotel => {
+                if (counts.hasOwnProperty(hotel.gap_category)) {
+                    counts[hotel.gap_category]++;
+                }
+            });
+
+            document.getElementById('count-much-better').textContent = counts['Much Better Than Expected'];
+            document.getElementById('count-better').textContent = counts['Better Than Expected'];
+            document.getElementById('count-expected').textContent = counts['As Expected'];
+            document.getElementById('count-medium').textContent = counts['Medium Risk'];
+            document.getElementById('count-high').textContent = counts['High Risk - Likely to Disappoint'];
+        }
+
+        // Sort hotels
+        function sortHotels() {
+            const sortBy = document.getElementById('sort-select').value;
+
+            filteredHotels.sort((a, b) => {
+                switch(sortBy) {
+                    case 'review':
+                        return parseFloat(b.review_score) - parseFloat(a.review_score);
+                    case 'gap':
+                        return parseFloat(a.gap_score) - parseFloat(b.gap_score);
+                    case 'distance':
+                        return parseFloat(a.distance_from_center_km) - parseFloat(b.distance_from_center_km);
+                    case 'reviews':
+                        return parseFloat(b.number_of_reviews) - parseFloat(a.number_of_reviews);
+                    default:
+                        return 0;
+                }
+            });
+
+            currentPage = 1;
+            displayHotels();
+        }
+
+        // Display hotels
+        function displayHotels() {
+            const container = document.getElementById('hotels-container');
+            const start = (currentPage - 1) * hotelsPerPage;
+            const end = start + hotelsPerPage;
+            const pageHotels = filteredHotels.slice(start, end);
+
+            document.getElementById('results-count').textContent = filteredHotels.length;
+
+            if (pageHotels.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 50px; color: var(--text-light);">No hotels found matching your criteria</div>';
+                return;
+            }
+
+            container.innerHTML = pageHotels.map(hotel => createHotelCard(hotel)).join('');
+            createPagination();
+        }
+
+        // Create hotel card HTML
+        function createHotelCard(hotel) {
+            const reviewScore = parseFloat(hotel.review_score) || 0;
+            const gapScore = parseFloat(hotel.gap_score) || 0;
+            const distance = parseFloat(hotel.distance_from_center_km) || 0;
+            const reviews = parseInt(hotel.number_of_reviews) || 0;
+
+            let ratingClass = '';
+            let ratingText = 'Good';
+            if (reviewScore >= 9) {
+                ratingText = 'Wonderful';
+                ratingClass = 'excellent';
+            } else if (reviewScore >= 8) {
+                ratingText = 'Very Good';
+                ratingClass = 'good';
+            } else if (reviewScore >= 7) {
+                ratingText = 'Good';
+                ratingClass = 'fair';
+            }
+
+            let gapClass = 'high';
+            let badgeClass = 'high-risk';
+            if (hotel.gap_category?.includes('Better') || hotel.gap_category === 'As Expected') {
+                gapClass = 'low';
+                badgeClass = 'low-risk';
+            } else if (hotel.gap_category === 'Medium Risk') {
+                gapClass = 'medium';
+                badgeClass = 'medium-risk';
+            }
+
+            const amenities = [];
+            if (hotel.has_wifi === '1') amenities.push('<div class="feature-tag"><i class="fas fa-wifi"></i> WiFi</div>');
+            if (hotel.has_parking === '1') amenities.push('<div class="feature-tag"><i class="fas fa-parking"></i> Parking</div>');
+            if (hotel.has_pool === '1') amenities.push('<div class="feature-tag"><i class="fas fa-swimming-pool"></i> Pool</div>');
+            if (hotel.has_gym === '1') amenities.push('<div class="feature-tag"><i class="fas fa-dumbbell"></i> Gym</div>');
+            if (hotel.has_breakfast === '1') amenities.push('<div class="feature-tag"><i class="fas fa-coffee"></i> Breakfast</div>');
+            if (hotel.has_ac === '1') amenities.push('<div class="feature-tag"><i class="fas fa-snowflake"></i> AC</div>');
+
+            // Create location badges HTML
+            let locationBadgesHTML = '';
+            if (hotel.location_badges && hotel.location_badges.length > 0) {
+                const badges = hotel.location_badges.map(badge =>
+                    `<div class="location-badge ${badge.color}" title="${badge.description}">
+                        <i class="fas ${badge.icon}"></i>
+                        ${badge.text}
+                    </div>`
+                ).join('');
+                locationBadgesHTML = `<div class="location-badges">${badges}</div>`;
+            }
+
+            // Create neighborhood score HTML
+            let neighborhoodScoreHTML = '';
+            if (hotel.neighborhood_score) {
+                neighborhoodScoreHTML = `
+                    <div class="neighborhood-score">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span>Neighborhood Score:</span>
+                        <span class="score-value">${hotel.neighborhood_score}/10</span>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="hotel-card" onclick="window.open('${hotel.url}', '_blank')">
+                    <div class="hotel-image">
+                        <div class="image-placeholder">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="hotel-badge ${badgeClass}">${hotel.gap_category}</div>
+                    </div>
+                    <div class="hotel-content">
+                        <div class="hotel-header">
+                            <div class="hotel-info">
+                                <h3 class="hotel-name">${hotel.title}</h3>
+                                <div class="hotel-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${hotel.city} • ${distance.toFixed(1)} km from center
+                                </div>
+                                <div class="hotel-rating">
+                                    <div class="rating-score ${ratingClass}">${reviewScore.toFixed(1)}</div>
+                                    <div>
+                                        <div class="rating-text">${ratingText}</div>
+                                        <div class="review-count">${reviews} reviews</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${locationBadgesHTML}
+                        ${neighborhoodScoreHTML}
+
+                        <div class="hotel-features">
+                            ${amenities.slice(0, 4).join('')}
+                        </div>
+
+                        <div class="hotel-description">
+                            ${hotel.main_praises ? `Guests loved: ${hotel.main_praises.split(',').slice(0, 3).join(', ')}` : 'Great location and amenities'}
+                        </div>
+
+                        <div class="hotel-footer">
+                            <div class="gap-indicator">
+                                <div>
+                                    <div class="gap-score-label">Reality Gap</div>
+                                    <div class="gap-score-value ${gapClass}">
+                                        ${gapScore.toFixed(0)}% - ${hotel.gap_category}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hotel-price">
+                                <div class="price-label">Reality Score</div>
+                                <div class="price-value">${hotel.predicted_reality_score || 'N/A'}</div>
+                                <button class="book-btn">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create pagination
+        function createPagination() {
+            const totalPages = Math.ceil(filteredHotels.length / hotelsPerPage);
+            const container = document.getElementById('pagination-container');
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '<div class="pagination">';
+
+            // Previous button
+            if (currentPage > 1) {
+                paginationHTML += `<a href="#" class="page-btn" onclick="goToPage(${currentPage - 1}); return false;">Previous</a>`;
+            }
+
+            // Page numbers
+            for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+                paginationHTML += `<a href="#" class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i}); return false;">${i}</a>`;
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `<a href="#" class="page-btn" onclick="goToPage(${currentPage + 1}); return false;">Next</a>`;
+            }
+
+            paginationHTML += '</div>';
+            container.innerHTML = paginationHTML;
+        }
+
+        // Go to page
+        function goToPage(page) {
+            currentPage = page;
+            displayHotels();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Search hotels
+        function searchHotels() {
+            applyFilters();
+        }
+
+        // Amenity package selection
+        function selectAmenityPackage(packageType) {
+            // First clear all amenity checkboxes
+            clearAllAmenities();
+
+            // Then select the appropriate amenities based on package
+            switch(packageType) {
+                case 'business':
+                    // Business: WiFi + Breakfast + Gym
+                    document.getElementById('has-wifi').checked = true;
+                    document.getElementById('has-breakfast').checked = true;
+                    document.getElementById('has-gym').checked = true;
+                    break;
+                case 'family':
+                    // Family: Pool + Kitchen + Parking + Pet-friendly
+                    document.getElementById('has-pool').checked = true;
+                    document.getElementById('has-kitchen').checked = true;
+                    document.getElementById('has-parking').checked = true;
+                    document.getElementById('has-pet_friendly').checked = true;
+                    break;
+                case 'luxury':
+                    // Luxury: Spa + Restaurant + Gym + Balcony
+                    document.getElementById('has-spa').checked = true;
+                    document.getElementById('has-restaurant').checked = true;
+                    document.getElementById('has-gym').checked = true;
+                    document.getElementById('has-balcony').checked = true;
+                    break;
+                case 'budget':
+                    // Budget: WiFi + AC only
+                    document.getElementById('has-wifi').checked = true;
+                    document.getElementById('has-ac').checked = true;
+                    break;
+            }
+
+            // Update button states
+            updatePackageButtons();
+
+            // Apply filters
+            applyFilters();
+        }
+
+        // Clear all amenity checkboxes
+        function clearAllAmenities() {
+            const amenityCheckboxes = [
+                'has-wifi', 'has-parking', 'has-pool', 'has-gym',
+                'has-breakfast', 'has-ac', 'has-spa', 'has-kitchen',
+                'has-balcony', 'has-restaurant', 'has-pet_friendly', 'has-elevator'
+            ];
+
+            amenityCheckboxes.forEach(id => {
+                document.getElementById(id).checked = false;
+            });
+
+            // Update button states
+            updatePackageButtons();
+
+            // Apply filters
+            applyFilters();
+        }
+
+        // Update package button active states
+        function updatePackageButtons() {
+            const buttons = document.querySelectorAll('.amenity-package-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Check which package is currently selected (if any)
+            const wifi = document.getElementById('has-wifi').checked;
+            const parking = document.getElementById('has-parking').checked;
+            const pool = document.getElementById('has-pool').checked;
+            const gym = document.getElementById('has-gym').checked;
+            const breakfast = document.getElementById('has-breakfast').checked;
+            const ac = document.getElementById('has-ac').checked;
+            const spa = document.getElementById('has-spa').checked;
+            const kitchen = document.getElementById('has-kitchen').checked;
+            const balcony = document.getElementById('has-balcony').checked;
+            const restaurant = document.getElementById('has-restaurant').checked;
+            const petFriendly = document.getElementById('has-pet_friendly').checked;
+
+            // Check if current selection matches any package
+            if (wifi && breakfast && gym && !pool && !spa && !kitchen && !balcony && !restaurant) {
+                // Business package
+                const btn = document.querySelector('.amenity-package-btn[onclick*="business"]');
+                if (btn) btn.classList.add('active');
+            } else if (pool && kitchen && parking && petFriendly && !spa && !restaurant && !gym) {
+                // Family package
+                const btn = document.querySelector('.amenity-package-btn[onclick*="family"]');
+                if (btn) btn.classList.add('active');
+            } else if (spa && restaurant && gym && balcony && !pool && !kitchen) {
+                // Luxury package
+                const btn = document.querySelector('.amenity-package-btn[onclick*="luxury"]');
+                if (btn) btn.classList.add('active');
+            } else if (wifi && ac && !pool && !gym && !breakfast && !spa && !kitchen && !balcony && !restaurant) {
+                // Budget package
+                const btn = document.querySelector('.amenity-package-btn[onclick*="budget"]');
+                if (btn) btn.classList.add('active');
+            }
+        }
+
+        // Add event listeners to individual amenity checkboxes
+        document.addEventListener('DOMContentLoaded', () => {
+            const amenityCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
+            amenityCheckboxes.forEach(checkbox => {
+                if (checkbox.id.startsWith('has-')) {
+                    checkbox.addEventListener('change', updatePackageButtons);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

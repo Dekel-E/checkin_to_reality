@@ -81,13 +81,18 @@
             justify-content: center;
             margin-bottom: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            animation: float 6s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            overflow: hidden;
         }
 
-        @keyframes float {
-            0% { transform: translatey(0px); }
-            50% { transform: translatey(-20px); }
-            100% { transform: translatey(0px); }
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .logo-placeholder {
@@ -384,9 +389,7 @@
         <div class="container">
             <div class="hero-content">
                 <div class="logo-container">
-                    <div class="logo-placeholder">
-                        <i class="fas fa-hotel"></i>
-                    </div>
+                    <img src="/static/logo.jpg" alt="Check-in to Reality Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'logo-placeholder\'><i class=\'fas fa-hotel\'></i></div>';">
                 </div>
                 <h1 class="hero-title fade-in">Check-in to Reality</h1>
                 <p class="hero-subtitle fade-in">Discover the Truth Behind Hotel Reviews</p>
@@ -398,6 +401,9 @@
                 <div class="fade-in">
                     <a href="/dashboard" class="btn-hero-primary">
                         <i class="fas fa-map-marked-alt"></i> Launch Dashboard
+                    </a>
+                    <a href="/hotels" class="btn-hero-primary">
+                        <i class="fas fa-list"></i> Browse Hotels
                     </a>
                     <a href="#features" class="btn-hero-secondary">
                         <i class="fas fa-info-circle"></i> Learn More
@@ -560,6 +566,7 @@
                     <i class="fas fa-hotel"></i> Check-in to Reality
                 </div>
                 <div class="footer-links">
+                    <a href="/hotels">Hotels</a>
                     <a href="/dashboard">Dashboard</a>
                     <a href="/api/stats">API</a>
                     <a href="/about">About</a>

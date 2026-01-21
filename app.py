@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from database import (get_stats, get_filtered_hotels, get_cities,
-                      get_hotel_markers_data, get_all_hotels, search_hotels)
+                      get_hotel_markers_data, get_all_hotels, search_hotels,
+                      calculate_location_badges, calculate_neighborhood_score)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
@@ -46,11 +47,23 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/analysis')
+def analysis():
+    """Complaint and Praise Analysis Dashboard"""
+    return render_template('analysis.html')
+
+
 
 @app.route('/dashboard')
 def dashboard_enhanced():
     """Enhanced hotel dashboard with improved UI and more filters"""
     return render_template('dashboard_enhanced.html')
+
+
+@app.route('/hotels')
+def hotels():
+    """Hotels list page with Booking.com-style layout"""
+    return render_template('hotels.html')
 
 
 @app.route('/api/hotels/filtered', methods=['POST'])
@@ -88,7 +101,14 @@ def api_filtered_hotels():
             parsed_filters['limit'] = filters['limit']
 
         hotels = get_filtered_hotels(parsed_filters)
-        return jsonify([dict(hotel) for hotel in hotels])
+        # Add location badges and neighborhood scores
+        enriched_hotels = []
+        for hotel in hotels:
+            hotel_dict = dict(hotel)
+            hotel_dict['location_badges'] = calculate_location_badges(hotel_dict)
+            hotel_dict['neighborhood_score'] = calculate_neighborhood_score(hotel_dict)
+            enriched_hotels.append(hotel_dict)
+        return jsonify(enriched_hotels)
 
     except Exception as e:
         print(f"Error in api_filtered_hotels: {e}")
@@ -100,7 +120,14 @@ def api_filtered_hotels():
 def api_hotel_markers():
     """API endpoint to get hotel data for map markers"""
     hotels = get_hotel_markers_data()
-    return jsonify([dict(hotel) for hotel in hotels])
+    # Add location badges and neighborhood scores
+    enriched_hotels = []
+    for hotel in hotels:
+        hotel_dict = dict(hotel)
+        hotel_dict['location_badges'] = calculate_location_badges(hotel_dict)
+        hotel_dict['neighborhood_score'] = calculate_neighborhood_score(hotel_dict)
+        enriched_hotels.append(hotel_dict)
+    return jsonify(enriched_hotels)
 
 
 @app.route('/api/cities')

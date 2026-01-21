@@ -153,7 +153,18 @@ def get_filtered_hotels(filters=None):
                    number_of_reviews, distance_from_center_km,
                    has_wifi, has_parking, has_pool, has_gym,
                    has_breakfast, has_ac, main_complaints, main_praises,
-                   risk_level, amenities_count, url
+                   risk_level, amenities_count, url,
+                   metro_railway_access, nightlife_count_500m,
+                   high_rated_restaurants_500m, parks_500m,
+                   noise_sources_500m, nearest_transport_m,
+                   restaurants_500m, avg_restaurant_rating_500m,
+                   has_spa, has_kitchen, has_balcony, has_restaurant,
+                   has_pet_friendly, has_elevator,
+                   complaint_noise, complaint_cleanliness,
+                   complaint_location, complaint_amenities,
+                   complaint_host, complaint_value,
+                   praise_quiet, praise_clean, praise_location,
+                   praise_amenities, praise_host, praise_value
                    FROM hotels"""
 
         # Always filter out hotels without valid coordinates - simplified check
@@ -218,7 +229,11 @@ def get_hotel_markers_data():
                    number_of_reviews, distance_from_center_km,
                    has_wifi, has_parking, has_pool, has_gym,
                    has_breakfast, has_ac, main_complaints, main_praises,
-                   risk_level, amenities_count, url
+                   risk_level, amenities_count, url,
+                   metro_railway_access, nightlife_count_500m,
+                   high_rated_restaurants_500m, parks_500m,
+                   noise_sources_500m, nearest_transport_m,
+                   restaurants_500m, avg_restaurant_rating_500m
             FROM hotels
             WHERE lat IS NOT NULL AND lon IS NOT NULL
             AND lat != '' AND lon != ''
@@ -226,3 +241,114 @@ def get_hotel_markers_data():
             AND lon ~ '^-?[0-9]'  -- Starts with optional minus and digit
         """)
         return cursor.fetchall()
+
+
+def calculate_location_badges(hotel):
+    """Calculate location-based badges for a hotel"""
+    badges = []
+
+    try:
+        # Metro Connected badge
+        if hotel.get('metro_railway_access') == '1':
+            badges.append({
+                'icon': 'fa-train-subway',
+                'text': 'Metro Connected',
+                'color': 'primary',
+                'description': 'Direct metro/railway access'
+            })
+
+        # Foodie Paradise badge
+        high_rated = float(hotel.get('high_rated_restaurants_500m', 0) or 0)
+        if high_rated > 10:
+            badges.append({
+                'icon': 'fa-utensils',
+                'text': 'Foodie Paradise',
+                'color': 'warning',
+                'description': f'{int(high_rated)} top-rated restaurants nearby'
+            })
+
+        # Nightlife Hub badge
+        nightlife = float(hotel.get('nightlife_count_500m', 0) or 0)
+        if nightlife > 5:
+            badges.append({
+                'icon': 'fa-cocktail',
+                'text': 'Nightlife Hub',
+                'color': 'info',
+                'description': f'{int(nightlife)} nightlife spots nearby'
+            })
+
+        # Green & Quiet badge
+        parks = float(hotel.get('parks_500m', 0) or 0)
+        noise = float(hotel.get('noise_sources_500m', 0) or 0)
+        if parks > 0 and noise < 2:
+            badges.append({
+                'icon': 'fa-tree',
+                'text': 'Green & Quiet',
+                'color': 'success',
+                'description': 'Parks nearby, low noise levels'
+            })
+
+        # Walking Distance badge
+        transport = float(hotel.get('nearest_transport_m', 9999) or 9999)
+        if transport < 200:
+            badges.append({
+                'icon': 'fa-walking',
+                'text': 'Walk Everywhere',
+                'color': 'secondary',
+                'description': f'Transport {int(transport)}m away'
+            })
+
+        # Central Location badge
+        distance = float(hotel.get('distance_from_center_km', 999) or 999)
+        if distance < 1:
+            badges.append({
+                'icon': 'fa-map-pin',
+                'text': 'City Center',
+                'color': 'danger',
+                'description': f'Only {distance}km from center'
+            })
+
+    except (ValueError, TypeError):
+        pass  # Skip badges if data is invalid
+
+    return badges
+
+
+def calculate_neighborhood_score(hotel):
+    """Calculate overall neighborhood quality score (0-10)"""
+    score = 5.0  # Base score
+
+    try:
+        # Positive factors
+        if hotel.get('metro_railway_access') == '1':
+            score += 1.0
+
+        restaurants = float(hotel.get('restaurants_500m', 0) or 0)
+        score += min(restaurants / 20, 1.0)  # Max 1 point for 20+ restaurants
+
+        high_rated = float(hotel.get('high_rated_restaurants_500m', 0) or 0)
+        score += min(high_rated / 10, 1.0)  # Max 1 point for 10+ high-rated
+
+        parks = float(hotel.get('parks_500m', 0) or 0)
+        score += min(parks / 3, 0.5)  # Max 0.5 points for 3+ parks
+
+        transport = float(hotel.get('nearest_transport_m', 9999) or 9999)
+        if transport < 500:
+            score += (500 - transport) / 500  # Up to 1 point for proximity
+
+        # Negative factors
+        noise = float(hotel.get('noise_sources_500m', 0) or 0)
+        score -= min(noise / 5, 1.5)  # Lose up to 1.5 points for 5+ noise sources
+
+        # Nightlife can be positive or negative depending on context
+        nightlife = float(hotel.get('nightlife_count_500m', 0) or 0)
+        if nightlife > 10:
+            score -= 0.5  # Too much nightlife might mean noise
+        elif nightlife > 0:
+            score += 0.3  # Some nightlife is good for vibrancy
+
+    except (ValueError, TypeError):
+        return 5.0  # Return neutral score if calculation fails
+
+    # Clamp between 0 and 10
+    return max(0, min(10, round(score, 1)))
