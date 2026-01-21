@@ -1,10 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}Home - Flask App{% endblock %}
+{% block title %}Hotel Reviews Analysis{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Welcome to Flask App</h1>
-    <p>This is your home page. Start building your application here!</p>
+<div class="container mt-5">
+    <h1>Welcome to Hotel Reviews Analysis</h1>
+    <p class="lead">A comprehensive hotel analysis platform with reality score predictions and gap analysis.</p>
+
+    <div class="mt-5">
+        <h3>Available Features:</h3>
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Interactive Hotel Dashboard</h5>
+                        <p class="card-text">Explore hotels on an interactive map with advanced filtering by gap scores, reviews, and amenities. See which hotels match their reviews and which ones don't.</p>
+                        <a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">API Access</h5>
+                        <p class="card-text">Access our hotel data programmatically through RESTful API endpoints.</p>
+                        <a href="/api/stats" class="btn btn-outline-primary">View API Stats</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 alert alert-info">
+        <h5>About Gap Scores</h5>
+        <p class="mb-0">Gap Score measures the difference between user reviews and our predicted reality score. A higher gap score indicates that the hotel's actual experience may differ significantly from its reviews.</p>
+        <ul class="mt-2 mb-0">
+            <li><strong>Low Risk (0-30):</strong> Reviews likely match reality</li>
+            <li><strong>Medium Risk (30-70):</strong> Some discrepancies expected</li>
+            <li><strong>High Risk (70-100):</strong> Significant differences from reviews</li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
