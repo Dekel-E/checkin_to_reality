@@ -261,6 +261,17 @@ function createEnhancedPopupContent(hotel) {
     const realityScore = hotel.predicted_reality_score ? parseFloat(hotel.predicted_reality_score).toFixed(1) : 'N/A';
     const gapScoreFormatted = hotel.gap_score ? parseFloat(hotel.gap_score).toFixed(0) : 'N/A';
 
+    // Calculate gap indicator values
+    const gapPercentage = parseFloat(hotel.gap_score) || 0;
+    const numberOfReviews = parseInt(hotel.number_of_reviews) || 0;
+
+    // Add caution tag if low reviews
+    const lowReviewCaution = numberOfReviews < 5 ?
+        `<div class="review-caution">
+            <i class="fas fa-exclamation-triangle"></i>
+            Caution - Low Review Data (${numberOfReviews} reviews)
+        </div>` : '';
+
     return `
         <div class="hotel-popup">
             <div class="popup-header">
@@ -286,6 +297,19 @@ function createEnhancedPopupContent(hotel) {
                 <div class="metric-box">
                     <div class="metric-label">Reviews</div>
                     <div class="metric-value">${hotel.number_of_reviews || 0}</div>
+                </div>
+            </div>
+
+            ${lowReviewCaution}
+
+            <!-- Visual Gap Indicator -->
+            <div class="gap-indicator-visual">
+                <div class="gap-indicator-track">
+                    <div class="gap-indicator-pointer" style="left: ${gapPercentage}%" data-gap="${gapScoreFormatted}% gap"></div>
+                </div>
+                <div class="gap-indicator-labels">
+                    <span>Better</span>
+                    <span>Worse</span>
                 </div>
             </div>
 
