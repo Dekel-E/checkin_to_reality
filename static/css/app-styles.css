@@ -20,9 +20,9 @@
     --text-muted: #6B7280;
     --text-light: #9CA3AF;
     --border-color: #E5E7EB;
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-primary: linear-gradient(135deg, #4F46E5 0%, #2563EB 100%);
+    --gradient-secondary: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+    --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
 }
 
 /* ===== GLOBAL RESET ===== */
@@ -442,4 +442,44 @@ button:active,
     h2 {
         font-size: 1.5rem;
     }
+}
+
+/* ===== DASHBOARD & ANALYSIS COMPONENTS ===== */
+.stat-card {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card.gradient-2 {
+    background: var(--gradient-secondary);
+}
+
+.stat-card.gradient-3 {
+    background: var(--gradient-success);
+}
+
+.sidebar-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 25px;
+}
+
+.dashboard-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 30px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.analysis-header {
+    background: var(--gradient-primary);
+    color: white;
 }
