@@ -4,7 +4,15 @@ A hotel analysis web application that helps users discover the reality behind ho
 
 ## Overview
 
-Check-in to Reality is a Flask-based web application that provides comprehensive hotel data analysis with interactive maps, advanced filtering, and neighborhood scoring. The application helps travelers make informed decisions by revealing the gap between advertised ratings and actual guest experiences.
+Check-in to Reality is a Flask-based web application that provides comprehensive hotel data analysis with interactive maps, advanced filtering, and neighborhood scoring. The application helps travelers compare hotel expectations with real guest experience.
+
+## Related Project
+
+This web app is based on the analysis work developed in the companion repository:
+
+- **Analysis / notebook project:** [Dekel-E/DSLab_project](https://github.com/Dekel-E/DSLab_project)
+
+The `DSLab_project` repository contains the notebook-based data science pipeline used to produce the cleaned datasets, engineered features, and model outputs that power this application.
 
 ## Features
 
@@ -41,6 +49,7 @@ Hotels are automatically tagged with smart badges:
 
 ```
 checkin_to_reality/
+├── README.md                  # Project documentation
 ├── app.py                      # Main Flask application
 ├── database.py                 # Database helper functions
 ├── init_db.py                  # Database initialization script
